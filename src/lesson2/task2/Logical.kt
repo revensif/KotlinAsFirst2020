@@ -24,9 +24,10 @@ fun isNumberHappy(number: Int): Boolean {
     val b = number / 100 % 10
     val c = number / 10 % 10
     val d = number % 10
-   return when {(a + b) == (c + d) -> true
-        else -> false }
-}
+   if ((a + b) == (c + d)) return true
+        else return false
+   }
+
 
 /**
  * Простая (2 балла)
@@ -57,11 +58,10 @@ fun circleInside(
     x1: Double, y1: Double, r1: Double,
     x2: Double, y2: Double, r2: Double
 ): Boolean {
-    return when {sqrt(sqr(x2 - x1) + sqr(y2 - y1)) + r1 <= r2 -> true
-    else -> false }
+    if (sqrt(sqr(x2 - x1) + sqr(y2 - y1)) + r1 <= r2)
+        return true
+    else return false
 }
-
-
 /**
  * Средняя (3 балла)
  *
@@ -72,8 +72,9 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    return when {(((r >= a) and (s >= b)) or ((r >= b) and (s >= a)))
-                or (((r >= a) and (s >= c)) or ((r >= c) and (s >= a)))
-                or (((r >= c) and (s >= b)) or ((r >= b) and (s >= c))) -> true
-        else -> false}
+    if ((((r >= a) and (s >= b)) or ((r >= b) and (s >= a)))
+        or (((r >= a) and (s >= c)) or ((r >= c) and (s >= a)))
+        or (((r >= c) and (s >= b)) or ((r >= b) and (s >= c))))
+        return true
+    else return false
 }

@@ -97,10 +97,10 @@ fun timeForHalfWay(
     val S = (s1 + s2 + s3) / 2
     var T = S / v1
     val T2 = (S - s1) / v2
-    if (S <= s1) {return T}
-    else {T = t1}
-    if (S <= s1 + s2) {return T + T2}
-    else {T = T + t2}
+    if (S <= s1) return T
+    else T = t1
+    if (S <= s1 + s2) return T + T2
+    else T = T + t2
     T = T + (S - s1 - s2) / v3
     return T
 }
@@ -156,10 +156,9 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    val k = max(a,c)
-    val m = min(d,b)
-   return when {m >= k -> m - k
-        else -> -1}
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
+    min(d,b) >= max(a,c) -> min(d,b) - max(a,c)
+    else -> -1
 }
+
 

@@ -3,6 +3,7 @@
 package lesson3.task1
 
 import kotlin.math.sqrt
+import lesson3.task1.fib as fib
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -72,15 +73,31 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
-
+fun digitNumber(n: Int): Int {
+    var s = 0
+    var k = n
+    if (n == 0) {return 1}
+    while (k > 0) {k = k / 10
+        s = s + 1}
+        return s
+}
 /**
  * Простая (2 балла)
  *
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    var a = 1
+    var b = 1
+    var c = a + b
+    val i:Int
+    when {(n <= 2) -> return 1}
+    for (i in 3..n) {c = a + b
+    a = b
+    b = c}
+        return c
+}
 
 /**
  * Простая (2 балла)
