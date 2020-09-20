@@ -2,6 +2,10 @@
 
 package lesson3.task1
 
+import lesson1.task1.sqr
+import kotlin.math.PI
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sqrt
 import lesson3.task1.fib as fib
 
@@ -76,11 +80,16 @@ fun digitCountInNumber(n: Int, m: Int): Int =
 fun digitNumber(n: Int): Int {
     var s = 0
     var k = n
-    if (n == 0) {return 1}
-    while (k > 0) {k = k / 10
-        s = s + 1}
-        return s
+    if (n == 0) {
+        return 1
+    }
+    while (k > 0) {
+        k = k / 10
+        s = s + 1
+    }
+    return s
 }
+
 /**
  * Простая (2 балла)
  *
@@ -91,12 +100,16 @@ fun fib(n: Int): Int {
     var a = 1
     var b = 1
     var c = a + b
-    val i:Int
-    when {(n <= 2) -> return 1}
-    for (i in 3..n) {c = a + b
-    a = b
-    b = c}
-        return c
+    val i: Int
+    when {
+        (n <= 2) -> return 1
+    }
+    for (i in 3..n) {
+        c = a + b
+        a = b
+        b = c
+    }
+    return c
 }
 
 /**
@@ -104,14 +117,34 @@ fun fib(n: Int): Int {
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int {
+    var i = 1
+    while (i <= n) {
+        i = i + 1
+        if (n % i == 0) {
+            return i
+            break
+        }
+    }
+    return 1
+}
 
 /**
  * Простая (2 балла)
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = TODO()
+fun maxDivisor(n: Int): Int {
+    var i: Int
+    for (i in n - 1 downTo 2) {
+        i == i - 1
+        if (n % i == 0) {
+            return i
+            break
+        }
+    }
+    return 1
+}
 
 /**
  * Простая (2 балла)
@@ -129,7 +162,16 @@ fun maxDivisor(n: Int): Int = TODO()
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var k = 0
+    var N = x
+    while (N != 1) {
+        k == k + 1
+        if (N % 2 == 0) N == N / 2
+        else N == N * 3 + 1
+    }
+    return k
+}
 
 /**
  * Средняя (3 балла)
@@ -137,7 +179,17 @@ fun collatzSteps(x: Int): Int = TODO()
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = TODO()
+fun lcm(m: Int, n: Int): Int {
+    var K = 1
+    var i: Int
+    for (i in max(n, m) downTo 2) {
+        if ((m % i == 0) and (n % i == 0)) {
+            K = i
+            break
+        }
+    }
+    return m * n / K
+}
 
 /**
  * Средняя (3 балла)
@@ -146,7 +198,18 @@ fun lcm(m: Int, n: Int): Int = TODO()
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = TODO()
+fun isCoPrime(m: Int, n: Int): Boolean {
+    var K = 1
+    var i: Int
+    for (i in min(n, m) downTo 2) {
+        if ((m % i == 0) and (n % i == 0)) {
+            K = i
+            break
+        }
+    }
+    if (K == 1) return true
+    else return false
+}
 
 /**
  * Средняя (3 балла)
@@ -164,7 +227,16 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var s = 0
+    var k = 0
+    while (n > 0) {
+        k = n % 10
+        s = s * 10 + k
+        n == n / 10
+    }
+    return s
+}
 
 /**
  * Средняя (3 балла)
@@ -175,8 +247,18 @@ fun revert(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
-
+fun isPalindrome(n: Int): Boolean {
+    var s = 0
+    var k = 0
+    var l = n
+    while (n > 0) {
+        k = n % 10
+        s = s * 10 + k
+        n == n / 10
+    }
+    if (s == l) return true
+    else return false
+}
 /**
  * Средняя (3 балла)
  *
@@ -208,7 +290,6 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double = TODO()
-
 /**
  * Сложная (4 балла)
  *
@@ -219,7 +300,6 @@ fun cos(x: Double, eps: Double): Double = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int = TODO()
-
 /**
  * Сложная (5 баллов)
  *
