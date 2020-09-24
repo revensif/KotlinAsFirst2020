@@ -3,6 +3,7 @@
 package lesson3.task1
 
 import lesson1.task1.sqr
+import java.lang.Math.pow
 import kotlin.math.PI
 import kotlin.math.max
 import kotlin.math.min
@@ -119,14 +120,14 @@ fun fib(n: Int): Int {
  */
 fun minDivisor(n: Int): Int {
     var i = 1
-    while (i <= n) {
+    while (i <= n / 2) {
         i = i + 1
         if (n % i == 0) {
             return i
             break
         }
     }
-    return 1
+    return n
 }
 
 /**
@@ -136,7 +137,7 @@ fun minDivisor(n: Int): Int {
  */
 fun maxDivisor(n: Int): Int {
     var i: Int
-    for (i in n - 1 downTo 2) {
+    for (i in n / 2 downTo 2) {
         i == i - 1
         if (n % i == 0) {
             return i
@@ -166,9 +167,9 @@ fun collatzSteps(x: Int): Int {
     var k = 0
     var N = x
     while (N != 1) {
-        k == k + 1
-        if (N % 2 == 0) N == N / 2
-        else N == N * 3 + 1
+        k = k + 1
+        if (N % 2 == 0) N = N / 2
+        else N = N * 3 + 1
     }
     return k
 }
@@ -299,7 +300,21 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+var k = 0
+var num = 0
+while (k < n) {
+    num += 1
+    var s = sqr(num)
+    while (s > 0) {
+        k += 1
+        s = s / 10
+    }
+}
+var s = sqr(num)
+if (k == n) return s % 10 else
+return (s / pow(10.0, (k - n).toDouble())).toInt() % 10
+}
 /**
  * Сложная (5 баллов)
  *
@@ -309,4 +324,19 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var k = 0
+    var num = 0
+    while (k < n) {
+        num += 1
+        var s = fib(num)
+        while (s > 0) {
+            k += 1
+            s = s / 10
+        }
+    }
+    var s = fib(num)
+    if (k == n) return s % 10 else
+        return (s / pow(10.0, (k - n).toDouble())).toInt() % 10
+}
+
