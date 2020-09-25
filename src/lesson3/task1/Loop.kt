@@ -4,10 +4,7 @@ package lesson3.task1
 
 import lesson1.task1.sqr
 import java.lang.Math.pow
-import kotlin.math.PI
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sqrt
+import kotlin.math.*
 import lesson3.task1.fib as fib
 
 // Урок 3: циклы
@@ -79,14 +76,11 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var s = 0
+    var s = 1
     var k = n
-    if (n == 0) {
-        return 1
-    }
-    while (k > 0) {
-        k = k / 10
-        s = s + 1
+    while (abs(k) > 9) {
+        s += 1
+        k /= 10
     }
     return s
 }
@@ -101,7 +95,6 @@ fun fib(n: Int): Int {
     var a = 1
     var b = 1
     var c = a + b
-    val i: Int
     when {
         (n <= 2) -> return 1
     }
@@ -121,10 +114,9 @@ fun fib(n: Int): Int {
 fun minDivisor(n: Int): Int {
     var i = 1
     while (i <= n / 2) {
-        i = i + 1
+        i += 1
         if (n % i == 0) {
             return i
-            break
         }
     }
     return n
@@ -136,7 +128,6 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var i: Int
     for (i in n / 2 downTo 2) {
         i == i - 1
         if (n % i == 0) {
@@ -165,11 +156,11 @@ fun maxDivisor(n: Int): Int {
  */
 fun collatzSteps(x: Int): Int {
     var k = 0
-    var N = x
-    while (N != 1) {
+    var n = x
+    while (n != 1) {
         k = k + 1
-        if (N % 2 == 0) N = N / 2
-        else N = N * 3 + 1
+        if (n % 2 == 0) n = n / 2
+        else n = n * 3 + 1
     }
     return k
 }
@@ -181,15 +172,16 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var K = 1
-    var i: Int
-    for (i in max(n, m) downTo 2) {
-        if ((m % i == 0) and (n % i == 0)) {
-            K = i
-            break
-        }
+    var max = max(m, n)
+    var min = min(m, n)
+    var s = 0
+    while (max % min != 0) {
+        max %= min
+        s = min
+        min = max
+        max = s
     }
-    return m * n / K
+    return m * n / min
 }
 
 /**
@@ -200,15 +192,13 @@ fun lcm(m: Int, n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    var K = 1
-    var i: Int
-    for (i in min(n, m) downTo 2) {
-        if ((m % i == 0) and (n % i == 0)) {
-            K = i
-            break
-        }
+    var k = n
+    var l = m
+    while ((k != 0) && (l != 0)) {
+        if (k > l) k %= l
+            else l %= k
     }
-    if (K == 1) return true
+    if (l + k == 1) return true
     else return false
 }
 
@@ -230,11 +220,10 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  */
 fun revert(n: Int): Int {
     var s = 0
-    var k = 0
-    while (n > 0) {
-        k = n % 10
-        s = s * 10 + k
-        n == n / 10
+    var k = n
+    while (k > 0) {
+        s = s * 10 + k % 10
+        k /= 10
     }
     return s
 }
@@ -249,17 +238,10 @@ fun revert(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun isPalindrome(n: Int): Boolean {
-    var s = 0
-    var k = 0
-    var l = n
-    while (n > 0) {
-        k = n % 10
-        s = s * 10 + k
-        n == n / 10
-    }
-    if (s == l) return true
-    else return false
+    val s = revert(n)
+    return s == n
 }
+
 /**
  * Средняя (3 балла)
  *
@@ -291,6 +273,7 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double = TODO()
+
 /**
  * Сложная (4 балла)
  *
@@ -301,20 +284,18 @@ fun cos(x: Double, eps: Double): Double = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-var k = 0
-var num = 0
-while (k < n) {
-    num += 1
-    var s = sqr(num)
-    while (s > 0) {
-        k += 1
-        s = s / 10
+    var k = 0
+    var num = 0
+    while (k < n) {
+        num += 1
+        var s = sqr(num)
+        k += digitNumber(s)
     }
+    var s = sqr(num)
+    return if (k == n) s % 10
+    else (s / pow(10.0, (k - n).toDouble())).toInt() % 10
 }
-var s = sqr(num)
-if (k == n) return s % 10 else
-return (s / pow(10.0, (k - n).toDouble())).toInt() % 10
-}
+
 /**
  * Сложная (5 баллов)
  *
@@ -330,13 +311,10 @@ fun fibSequenceDigit(n: Int): Int {
     while (k < n) {
         num += 1
         var s = fib(num)
-        while (s > 0) {
-            k += 1
-            s = s / 10
-        }
+        k += digitNumber(s)
     }
     var s = fib(num)
-    if (k == n) return s % 10 else
-        return (s / pow(10.0, (k - n).toDouble())).toInt() % 10
+    return if (k == n)  s % 10
+    else (s / pow(10.0, (k - n).toDouble())).toInt() % 10
 }
 
