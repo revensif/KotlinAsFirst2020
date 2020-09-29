@@ -128,7 +128,7 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var s = minDivisor(n)
+    val s = minDivisor(n)
     return n / s
 }
 
@@ -190,11 +190,11 @@ fun isCoPrime(m: Int, n: Int): Boolean {
     var l = m
     while ((k != 0) && (l != 0)) {
         if (k > l) k %= l
-            else l %= k
+        else l %= k
     }
-    if (l + k == 1) return true
-    else return false
+    return l + k == 1
 }
+
 
 /**
  * Средняя (3 балла)
@@ -282,10 +282,10 @@ fun squareSequenceDigit(n: Int): Int {
     var num = 0
     while (k < n) {
         num += 1
-        var s = sqr(num)
+        val s = sqr(num)
         k += digitNumber(s)
     }
-    var s = sqr(num)
+    val s = sqr(num)
     return if (k == n) s % 10
     else (s / pow(10.0, (k - n).toDouble())).toInt() % 10
 }
@@ -304,10 +304,10 @@ fun fibSequenceDigit(n: Int): Int {
     var num = 0
     while (k < n) {
         num += 1
-        var s = fib(num)
+        val s = fib(num)
         k += digitNumber(s)
     }
-    var s = fib(num)
+    val s = fib(num)
     return if (k == n)  s % 10
     else (s / pow(10.0, (k - n).toDouble())).toInt() % 10
 }
