@@ -3,6 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import java.lang.Math.pow
 import kotlin.math.sqrt
 
 // Урок 4: списки
@@ -186,7 +187,15 @@ fun polynom(p: List<Int>, x: Int): Int = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
+fun accumulate(list: MutableList<Int>): MutableList<Int> {
+    if (list.isEmpty() || list.size == 1) return list
+    var sum = list[0]
+    for (i in 1 until list.size) {
+        sum += list[i]
+        list[i] = sum
+    }
+    return list
+}
 
 /**
  * Средняя (3 балла)
@@ -227,6 +236,7 @@ fun factorizeToString(n: Int): String {
     s.append(list[list.size - 1].toString())
     return s.toString()
 }
+
 /**
  * Средняя (3 балла)
  *
@@ -234,7 +244,16 @@ fun factorizeToString(n: Int): String {
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    var list = listOf<Int>()
+    var s = n
+    while (s >= base) {
+        list += s % base
+        s /= base
+    }
+    list += s
+    return list.asReversed()
+}
 
 /**
  * Сложная (4 балла)
@@ -256,7 +275,13 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var s = 0.0
+    for (i in (digits.size - 1) downTo 0) {
+        s += digits[i] * pow(base.toDouble(), (digits.size - 1 - i).toDouble())
+    }
+    return s.toInt()
+}
 
 /**
  * Сложная (4 балла)
@@ -289,4 +314,85 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    var string = ""
+    val list2 = listOf("", "один", "два", "три", "четыре", "пять",
+        "шесть", "семь", "восемь", "девять")
+    val list1 = listOf("", "одна ", "две ", "три ", "четыре ", "пять ",
+        "шесть ", "семь ", "восемь ", "девять ")
+    val part = listOf(n / 1000, n % 1000)
+    val unitOfPart0 = part[0] % 10
+    val dozensOfPart0 = (part[0] / 10) % 10
+    val hundredsOfPart0 = part[0] / 100
+    val unitOfPart1 = part[1] % 10
+    val dozensOfPart1 = (part[1] / 10) % 10
+    val hundredsOfPart1 = part[1] / 100
+    if (part[0] != 0) {
+        string += when (hundredsOfPart0) {
+            0 -> ""
+            1 -> "сто "
+            2 -> "двести "
+            3 -> "триста "
+            4 -> "четыреста "
+            else -> list2[hundredsOfPart0] + "сот "
+        }
+        string += when {
+            dozensOfPart0 * 10 + unitOfPart0 == 11 -> "одиннадцать "
+            dozensOfPart0 * 10 + unitOfPart0 == 12 -> "двенадцать "
+            dozensOfPart0 * 10 + unitOfPart0 == 13 -> "тринадцать "
+            dozensOfPart0 * 10 + unitOfPart0 == 14 -> "четырнадцать "
+            dozensOfPart0 * 10 + unitOfPart0 == 15 -> "пятнадцать "
+            dozensOfPart0 * 10 + unitOfPart0 == 16 -> "шестнадцать "
+            dozensOfPart0 * 10 + unitOfPart0 == 17 -> "семнадцать "
+            dozensOfPart0 * 10 + unitOfPart0 == 18 -> "восемнадцать "
+            dozensOfPart0 * 10 + unitOfPart0 == 19 -> "девятнадцать "
+            dozensOfPart0 * 10 + unitOfPart0 == 10 -> "десять "
+            dozensOfPart0 in 2..3 -> list2[dozensOfPart0] + "дцать " + list1[unitOfPart0]
+            dozensOfPart0 == 4 -> "сорок " + list1[unitOfPart0]
+            dozensOfPart0 in 5..8 -> list2[dozensOfPart0] + "десят " + list1[unitOfPart0]
+            dozensOfPart0 == 9 -> "девяносто " + list1[unitOfPart0]
+            else -> list1[unitOfPart0]
+        }
+        string += when {
+            dozensOfPart0 * 10 + unitOfPart0 in 5..20 -> "тысяч"
+            unitOfPart0 == 1 -> "тысяча"
+            unitOfPart0 in 2..4 -> "тысячи"
+            else -> "тысяч"
+        }
+    }
+    if (part[0] != 0 && part[1] != 0) string += " "
+    string += when (hundredsOfPart1) {
+        0 -> ""
+        1 -> "сто"
+        2 -> "двести"
+        3 -> "триста"
+        4 -> "четыреста"
+        else -> list2[hundredsOfPart1] + "сот"
+    }
+    if (dozensOfPart1 + unitOfPart1 != 0 && part[1] > 99) string += " "
+    string += when {
+        dozensOfPart1 * 10 + unitOfPart1 == 11 -> "одиннадцать"
+        dozensOfPart1 * 10 + unitOfPart1 == 12 -> "двенадцать"
+        dozensOfPart1 * 10 + unitOfPart1 == 13 -> "тринадцать"
+        dozensOfPart1 * 10 + unitOfPart1 == 14 -> "четырнадцать"
+        dozensOfPart1 * 10 + unitOfPart1 == 15 -> "пятнадцать"
+        dozensOfPart1 * 10 + unitOfPart1 == 16 -> "шестнадцать"
+        dozensOfPart1 * 10 + unitOfPart1 == 17 -> "семнадцать"
+        dozensOfPart1 * 10 + unitOfPart1 == 18 -> "восемнадцать"
+        dozensOfPart1 * 10 + unitOfPart1 == 19 -> "девятнадцать"
+        dozensOfPart1 * 10 + unitOfPart1 == 10 -> "десять"
+        dozensOfPart1 in 2..3 -> list2[dozensOfPart1] + "дцать"
+        dozensOfPart1 == 4 -> "сорок"
+        dozensOfPart1 in 5..8 -> list2[dozensOfPart1] + "десят"
+        dozensOfPart1 == 9 -> "девяносто"
+        else -> ""
+    }
+    if (dozensOfPart1 != 1) {
+        if (dozensOfPart1 == 0 || part[1] < 10) string += list2[unitOfPart1]
+        else {
+            if (unitOfPart1 != 0) string += " " + list2[unitOfPart1]
+        }
+    }
+    return string
+
+}
