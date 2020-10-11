@@ -147,7 +147,7 @@ fun mean(list: List<Double>): Double {
 fun center(list: MutableList<Double>): MutableList<Double> {
     if (list.isEmpty()) return list
     val a = mean(list)
-    for (i in 0 until list.size)
+    for (i in list.indices)
         list[i] -= a
     return list
 }
@@ -210,6 +210,10 @@ fun factorize(n: Int): List<Int> {
     val list = mutableListOf<Int>()
     while (s != 1) {
         if (s % i == 0) {
+            if (i > s / 2) {
+                list.add(s)
+                return list
+            }
             s /= i
             list.add(i)
         } else {
@@ -229,14 +233,8 @@ fun factorize(n: Int): List<Int> {
 fun factorizeToString(n: Int): String {
     val list = factorize(n)
     if (list.size == 1) return list[0].toString()
-    val s = StringBuilder(list[0].toString() + "*")
-    for (i in 1 until list.size - 1) {
-        s.append(list[i].toString() + "*")
-    }
-    s.append(list[list.size - 1].toString())
-    return s.toString()
+    return list.joinToString(separator = "*")
 }
-
 /**
  * Средняя (3 балла)
  *
@@ -245,7 +243,7 @@ fun factorizeToString(n: Int): String {
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
-    var list = listOf<Int>()
+    val list = mutableListOf<Int>()
     var s = n
     while (s >= base) {
         list += s % base
@@ -315,11 +313,13 @@ fun roman(n: Int): String = TODO()
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-    var string = ""
+    var string = buildString{}
     val list2 = listOf("", "один", "два", "три", "четыре", "пять",
         "шесть", "семь", "восемь", "девять")
     val list1 = listOf("", "одна ", "две ", "три ", "четыре ", "пять ",
         "шесть ", "семь ", "восемь ", "девять ")
+    val list3 = listOf("", "один", "две", "три", "четыр", "пят",
+        "шест", "сем", "восем", "девят")
     val part = listOf(n / 1000, n % 1000)
     val unitOfPart0 = part[0] % 10
     val dozensOfPart0 = (part[0] / 10) % 10
@@ -337,15 +337,7 @@ fun russian(n: Int): String {
             else -> list2[hundredsOfPart0] + "сот "
         }
         string += when {
-            dozensOfPart0 * 10 + unitOfPart0 == 11 -> "одиннадцать "
-            dozensOfPart0 * 10 + unitOfPart0 == 12 -> "двенадцать "
-            dozensOfPart0 * 10 + unitOfPart0 == 13 -> "тринадцать "
-            dozensOfPart0 * 10 + unitOfPart0 == 14 -> "четырнадцать "
-            dozensOfPart0 * 10 + unitOfPart0 == 15 -> "пятнадцать "
-            dozensOfPart0 * 10 + unitOfPart0 == 16 -> "шестнадцать "
-            dozensOfPart0 * 10 + unitOfPart0 == 17 -> "семнадцать "
-            dozensOfPart0 * 10 + unitOfPart0 == 18 -> "восемнадцать "
-            dozensOfPart0 * 10 + unitOfPart0 == 19 -> "девятнадцать "
+            dozensOfPart0 * 10 + unitOfPart0 in 11..19 -> list3[unitOfPart0] + "надцать "
             dozensOfPart0 * 10 + unitOfPart0 == 10 -> "десять "
             dozensOfPart0 in 2..3 -> list2[dozensOfPart0] + "дцать " + list1[unitOfPart0]
             dozensOfPart0 == 4 -> "сорок " + list1[unitOfPart0]
@@ -371,15 +363,7 @@ fun russian(n: Int): String {
     }
     if (dozensOfPart1 + unitOfPart1 != 0 && part[1] > 99) string += " "
     string += when {
-        dozensOfPart1 * 10 + unitOfPart1 == 11 -> "одиннадцать"
-        dozensOfPart1 * 10 + unitOfPart1 == 12 -> "двенадцать"
-        dozensOfPart1 * 10 + unitOfPart1 == 13 -> "тринадцать"
-        dozensOfPart1 * 10 + unitOfPart1 == 14 -> "четырнадцать"
-        dozensOfPart1 * 10 + unitOfPart1 == 15 -> "пятнадцать"
-        dozensOfPart1 * 10 + unitOfPart1 == 16 -> "шестнадцать"
-        dozensOfPart1 * 10 + unitOfPart1 == 17 -> "семнадцать"
-        dozensOfPart1 * 10 + unitOfPart1 == 18 -> "восемнадцать"
-        dozensOfPart1 * 10 + unitOfPart1 == 19 -> "девятнадцать"
+        dozensOfPart1 * 10 + unitOfPart1 in 11..19 -> list3[unitOfPart1] + "надцать"
         dozensOfPart1 * 10 + unitOfPart1 == 10 -> "десять"
         dozensOfPart1 in 2..3 -> list2[dozensOfPart1] + "дцать"
         dozensOfPart1 == 4 -> "сорок"
