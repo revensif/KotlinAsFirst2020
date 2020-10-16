@@ -209,18 +209,18 @@ fun factorize(n: Int): List<Int> {
     var s = n
     val list = mutableListOf<Int>()
     while (s != 1) {
+        if (i > sqrt(s.toDouble())) {
+            list.add(s)
+            return list
+        }
         if (s % i == 0) {
-            if (i > s / 2) {
-                list.add(s)
-                return list
-            }
             s /= i
             list.add(i)
         } else {
             i++
         }
     }
-    return list.sorted()
+    return list
 }
 
 /**
@@ -232,9 +232,9 @@ fun factorize(n: Int): List<Int> {
  */
 fun factorizeToString(n: Int): String {
     val list = factorize(n)
-    if (list.size == 1) return list[0].toString()
     return list.joinToString(separator = "*")
 }
+
 /**
  * Средняя (3 балла)
  *
@@ -313,13 +313,19 @@ fun roman(n: Int): String = TODO()
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-    var string = buildString{}
-    val list2 = listOf("", "один", "два", "три", "четыре", "пять",
-        "шесть", "семь", "восемь", "девять")
-    val list1 = listOf("", "одна ", "две ", "три ", "четыре ", "пять ",
-        "шесть ", "семь ", "восемь ", "девять ")
-    val list3 = listOf("", "один", "две", "три", "четыр", "пят",
-        "шест", "сем", "восем", "девят")
+    val string = StringBuilder()
+    val list2 = listOf(
+        "", "один", "два", "три", "четыре", "пять",
+        "шесть", "семь", "восемь", "девять"
+    )
+    val list1 = listOf(
+        "", "одна ", "две ", "три ", "четыре ", "пять ",
+        "шесть ", "семь ", "восемь ", "девять "
+    )
+    val list3 = listOf(
+        "", "один", "две", "три", "четыр", "пят",
+        "шест", "сем", "восем", "девят"
+    )
     val part = listOf(n / 1000, n % 1000)
     val unitOfPart0 = part[0] % 10
     val dozensOfPart0 = (part[0] / 10) % 10
@@ -328,55 +334,64 @@ fun russian(n: Int): String {
     val dozensOfPart1 = (part[1] / 10) % 10
     val hundredsOfPart1 = part[1] / 100
     if (part[0] != 0) {
-        string += when (hundredsOfPart0) {
+        string.append(
+            when (hundredsOfPart0) {
+                0 -> ""
+                1 -> "сто "
+                2 -> "двести "
+                3 -> "триста "
+                4 -> "четыреста "
+                else -> list2[hundredsOfPart0] + "сот "
+            }
+        )
+        string.append(
+            when {
+                dozensOfPart0 * 10 + unitOfPart0 in 11..19 -> list3[unitOfPart0] + "надцать "
+                dozensOfPart0 * 10 + unitOfPart0 == 10 -> "десять "
+                dozensOfPart0 in 2..3 -> list2[dozensOfPart0] + "дцать " + list1[unitOfPart0]
+                dozensOfPart0 == 4 -> "сорок " + list1[unitOfPart0]
+                dozensOfPart0 in 5..8 -> list2[dozensOfPart0] + "десят " + list1[unitOfPart0]
+                dozensOfPart0 == 9 -> "девяносто " + list1[unitOfPart0]
+                else -> list1[unitOfPart0]
+            }
+        )
+        string.append(
+            when {
+                dozensOfPart0 * 10 + unitOfPart0 in 5..20 -> "тысяч"
+                unitOfPart0 == 1 -> "тысяча"
+                unitOfPart0 in 2..4 -> "тысячи"
+                else -> "тысяч"
+            }
+        )
+    }
+    if (part[0] != 0 && part[1] != 0) string.append(" ")
+    string.append(
+        when (hundredsOfPart1) {
             0 -> ""
-            1 -> "сто "
-            2 -> "двести "
-            3 -> "триста "
-            4 -> "четыреста "
-            else -> list2[hundredsOfPart0] + "сот "
+            1 -> "сто"
+            2 -> "двести"
+            3 -> "триста"
+            4 -> "четыреста"
+            else -> list2[hundredsOfPart1] + "сот"
         }
-        string += when {
-            dozensOfPart0 * 10 + unitOfPart0 in 11..19 -> list3[unitOfPart0] + "надцать "
-            dozensOfPart0 * 10 + unitOfPart0 == 10 -> "десять "
-            dozensOfPart0 in 2..3 -> list2[dozensOfPart0] + "дцать " + list1[unitOfPart0]
-            dozensOfPart0 == 4 -> "сорок " + list1[unitOfPart0]
-            dozensOfPart0 in 5..8 -> list2[dozensOfPart0] + "десят " + list1[unitOfPart0]
-            dozensOfPart0 == 9 -> "девяносто " + list1[unitOfPart0]
-            else -> list1[unitOfPart0]
+    )
+    if (dozensOfPart1 + unitOfPart1 != 0 && part[1] > 99) string.append(" ")
+    string.append(
+        when {
+            dozensOfPart1 * 10 + unitOfPart1 in 11..19 -> list3[unitOfPart1] + "надцать"
+            dozensOfPart1 * 10 + unitOfPart1 == 10 -> "десять"
+            dozensOfPart1 in 2..3 -> list2[dozensOfPart1] + "дцать"
+            dozensOfPart1 == 4 -> "сорок"
+            dozensOfPart1 in 5..8 -> list2[dozensOfPart1] + "десят"
+            dozensOfPart1 == 9 -> "девяносто"
+            else -> ""
         }
-        string += when {
-            dozensOfPart0 * 10 + unitOfPart0 in 5..20 -> "тысяч"
-            unitOfPart0 == 1 -> "тысяча"
-            unitOfPart0 in 2..4 -> "тысячи"
-            else -> "тысяч"
-        }
-    }
-    if (part[0] != 0 && part[1] != 0) string += " "
-    string += when (hundredsOfPart1) {
-        0 -> ""
-        1 -> "сто"
-        2 -> "двести"
-        3 -> "триста"
-        4 -> "четыреста"
-        else -> list2[hundredsOfPart1] + "сот"
-    }
-    if (dozensOfPart1 + unitOfPart1 != 0 && part[1] > 99) string += " "
-    string += when {
-        dozensOfPart1 * 10 + unitOfPart1 in 11..19 -> list3[unitOfPart1] + "надцать"
-        dozensOfPart1 * 10 + unitOfPart1 == 10 -> "десять"
-        dozensOfPart1 in 2..3 -> list2[dozensOfPart1] + "дцать"
-        dozensOfPart1 == 4 -> "сорок"
-        dozensOfPart1 in 5..8 -> list2[dozensOfPart1] + "десят"
-        dozensOfPart1 == 9 -> "девяносто"
-        else -> ""
-    }
+    )
     if (dozensOfPart1 != 1) {
-        if (dozensOfPart1 == 0 || part[1] < 10) string += list2[unitOfPart1]
+        if (dozensOfPart1 == 0 || part[1] < 10) string.append(list2[unitOfPart1])
         else {
-            if (unitOfPart1 != 0) string += " " + list2[unitOfPart1]
+            if (unitOfPart1 != 0) string.append(" " + list2[unitOfPart1])
         }
     }
-    return string
-
+    return string.toString()
 }
