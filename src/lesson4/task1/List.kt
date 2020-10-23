@@ -312,83 +312,95 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String {
-    return buildString {
-        val list2 = listOf(
-            "", "один", "два", "три", "четыре", "пять",
-            "шесть", "семь", "восемь", "девять"
+fun russian(n: Int): String = buildString {
+    val list2 = listOf(
+        "", "один", "два", "три", "четыре", "пять",
+        "шесть", "семь", "восемь", "девять"
+    )
+    val list1 = listOf(
+        "", "одна ", "две ", "три ", "четыре ", "пять ",
+        "шесть ", "семь ", "восемь ", "девять "
+    )
+    val list3 = listOf(
+        "", "", "", "", "", "",
+        "", "", "", "", "", "один",
+        "две", "три", "четыр", "пят",
+        "шест", "сем", "восем", "девят"
+
+    )
+    val part = listOf(n / 1000, n % 1000)
+    val unitOfPart0 = part[0] % 10
+    val dozensOfPart0 = (part[0] / 10) % 10
+    val hundredsOfPart0 = part[0] / 100
+    val unitOfPart1 = part[1] % 10
+    val dozensOfPart1 = (part[1] / 10) % 10
+    val hundredsOfPart1 = part[1] / 100
+    val a = listOf(hundredsOfPart0, hundredsOfPart1)
+    val b = mutableListOf<String>()
+    val c = listOf(dozensOfPart0, dozensOfPart1)
+    val d = mutableListOf<String>()
+    val f = listOf(dozensOfPart0 * 10 + unitOfPart0, dozensOfPart1 * 10 + unitOfPart1)
+    val g = mutableListOf<String>()
+    for (elements in a) {
+        b.add(
+            when (elements) {
+                0 -> ""
+                1 -> "сто"
+                2 -> "двести"
+                3 -> "триста"
+                4 -> "четыреста"
+                else -> list2[elements] + "сот"
+            }
         )
-        val list1 = listOf(
-            "", "одна ", "две ", "три ", "четыре ", "пять ",
-            "шесть ", "семь ", "восемь ", "девять "
-        )
-        val list3 = listOf(
-            "", "один", "две", "три", "четыр", "пят",
-            "шест", "сем", "восем", "девят"
-        )
-        val part = listOf(n / 1000, n % 1000)
-        val unitOfPart0 = part[0] % 10
-        val dozensOfPart0 = (part[0] / 10) % 10
-        val hundredsOfPart0 = part[0] / 100
-        val unitOfPart1 = part[1] % 10
-        val dozensOfPart1 = (part[1] / 10) % 10
-        val hundredsOfPart1 = part[1] / 100
-        val a = mutableListOf(hundredsOfPart0, hundredsOfPart1)
-        val b = mutableListOf<String>()
-        for (i in a.indices) {
-            b.add(
-                when (a[i]) {
-                    0 -> ""
-                    1 -> "сто"
-                    2 -> "двести"
-                    3 -> "триста"
-                    4 -> "четыреста"
-                    else -> list2[a[i]] + "сот"
-                }
-            )
-        }
-        if (hundredsOfPart0 != 0) b[0] += " "
-        if (part[0] != 0) {
-            append(b[0])
-            append(
-                when {
-                    dozensOfPart0 * 10 + unitOfPart0 in 11..19 -> list3[unitOfPart0] + "надцать "
-                    dozensOfPart0 * 10 + unitOfPart0 == 10 -> "десять "
-                    dozensOfPart0 in 2..3 -> list2[dozensOfPart0] + "дцать " + list1[unitOfPart0]
-                    dozensOfPart0 == 4 -> "сорок " + list1[unitOfPart0]
-                    dozensOfPart0 in 5..8 -> list2[dozensOfPart0] + "десят " + list1[unitOfPart0]
-                    dozensOfPart0 == 9 -> "девяносто " + list1[unitOfPart0]
-                    else -> list1[unitOfPart0]
-                }
-            )
-            append(
-                when {
-                    dozensOfPart0 * 10 + unitOfPart0 in 5..20 -> "тысяч"
-                    unitOfPart0 == 1 -> "тысяча"
-                    unitOfPart0 in 2..4 -> "тысячи"
-                    else -> "тысяч"
-                }
-            )
-        }
-        if (part[0] != 0 && part[1] != 0) append(" ")
-        append(b[1])
-        if (dozensOfPart1 + unitOfPart1 != 0 && part[1] > 99) append(" ")
-        append(
-            when {
-                dozensOfPart1 * 10 + unitOfPart1 in 11..19 -> list3[unitOfPart1] + "надцать"
-                dozensOfPart1 * 10 + unitOfPart1 == 10 -> "десять"
-                dozensOfPart1 in 2..3 -> list2[dozensOfPart1] + "дцать"
-                dozensOfPart1 == 4 -> "сорок"
-                dozensOfPart1 in 5..8 -> list2[dozensOfPart1] + "десят"
-                dozensOfPart1 == 9 -> "девяносто"
+    }
+    for (elements in f) {
+        d.add(
+            when (elements) {
+                in 11..19 -> list3[elements] + "надцать"
+                10 -> "десять"
                 else -> ""
             }
         )
-        if (dozensOfPart1 != 1) {
-            if (dozensOfPart1 == 0 || part[1] < 10) append(list2[unitOfPart1])
-            else {
-                if (unitOfPart1 != 0) append(" " + list2[unitOfPart1])
+    }
+    for (elements in c) {
+        g.add(
+            when (elements) {
+                in 2..3 -> list2[elements] + "дцать"
+                4 -> "сорок "
+                in 5..8 -> list2[elements] + "десят"
+                9 -> "девяносто"
+                else -> ""
             }
+        )
+    }
+    if (dozensOfPart0 != 0) g[0] += " "
+    if (unitOfPart0 != 0) g[0] += list1[unitOfPart0]
+    if (d[0].isEmpty()) d[0] += ""
+    else d[0] += " "
+    if (hundredsOfPart0 != 0) b[0] += " "
+    if (part[0] != 0) {
+        append(b[0])
+        if (d[0].isEmpty()) append(g[0])
+        else append(d[0])
+        append(
+            when {
+                dozensOfPart0 * 10 + unitOfPart0 in 5..20 -> "тысяч"
+                unitOfPart0 == 1 -> "тысяча"
+                unitOfPart0 in 2..4 -> "тысячи"
+                else -> "тысяч"
+            }
+        )
+    }
+    if (part[0] != 0 && part[1] != 0) append(" ")
+    append(b[1])
+    if (dozensOfPart1 + unitOfPart1 != 0 && part[1] > 99) append(" ")
+    if (d[1].isEmpty()) append(g[1])
+    else append(d[1])
+    if (dozensOfPart1 != 1) {
+        if (dozensOfPart1 == 0 || part[1] < 10) append(list2[unitOfPart1])
+        else {
+            if (unitOfPart1 != 0) append(" " + list2[unitOfPart1])
         }
     }
 }
+
