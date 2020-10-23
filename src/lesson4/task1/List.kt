@@ -304,47 +304,6 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String = TODO()
-fun hun0(n: Int): String {
-    return buildString {
-        val part = listOf(n / 1000, n % 1000)
-        val list2 = listOf(
-            "", "один", "два", "три", "четыре", "пять",
-            "шесть", "семь", "восемь", "девять"
-        )
-        val hundredsOfPart0 = part[0] / 100
-        append(
-            when (hundredsOfPart0) {
-                0 -> ""
-                1 -> "сто "
-                2 -> "двести "
-                3 -> "триста "
-                4 -> "четыреста "
-                else -> list2[hundredsOfPart0] + "сот "
-            }
-        )
-    }
-}
-
-fun hun1(n: Int): String {
-    return buildString {
-        val part = listOf(n / 1000, n % 1000)
-        val list2 = listOf(
-            "", "один", "два", "три", "четыре", "пять",
-            "шесть", "семь", "восемь", "девять"
-        )
-        val hundredsOfPart1 = part[1] / 100
-        append(
-            when (hundredsOfPart1) {
-                0 -> ""
-                1 -> "сто"
-                2 -> "двести"
-                3 -> "триста"
-                4 -> "четыреста"
-                else -> list2[hundredsOfPart1] + "сот"
-            }
-        )
-    }
-}
 
 /**
  * Очень сложная (7 баллов)
@@ -370,10 +329,27 @@ fun russian(n: Int): String {
         val part = listOf(n / 1000, n % 1000)
         val unitOfPart0 = part[0] % 10
         val dozensOfPart0 = (part[0] / 10) % 10
+        val hundredsOfPart0 = part[0] / 100
         val unitOfPart1 = part[1] % 10
         val dozensOfPart1 = (part[1] / 10) % 10
+        val hundredsOfPart1 = part[1] / 100
+        val a = mutableListOf(hundredsOfPart0, hundredsOfPart1)
+        val b = mutableListOf<String>()
+        for (i in a.indices) {
+            b.add(
+                when (a[i]) {
+                    0 -> ""
+                    1 -> "сто"
+                    2 -> "двести"
+                    3 -> "триста"
+                    4 -> "четыреста"
+                    else -> list2[a[i]] + "сот"
+                }
+            )
+        }
+        if (hundredsOfPart0 != 0) b[0] += " "
         if (part[0] != 0) {
-            append(hun0(n))
+            append(b[0])
             append(
                 when {
                     dozensOfPart0 * 10 + unitOfPart0 in 11..19 -> list3[unitOfPart0] + "надцать "
@@ -395,7 +371,7 @@ fun russian(n: Int): String {
             )
         }
         if (part[0] != 0 && part[1] != 0) append(" ")
-        append(hun1(n))
+        append(b[1])
         if (dozensOfPart1 + unitOfPart1 != 0 && part[1] > 99) append(" ")
         append(
             when {
