@@ -336,43 +336,34 @@ fun russian(n: Int): String = buildString {
     val dozensOfPart1 = (part[1] / 10) % 10
     val hundredsOfPart1 = part[1] / 100
     val a = listOf(hundredsOfPart0, hundredsOfPart1)
-    val b = mutableListOf<String>()
     val c = listOf(dozensOfPart0, dozensOfPart1)
-    val d = mutableListOf<String>()
     val f = listOf(dozensOfPart0 * 10 + unitOfPart0, dozensOfPart1 * 10 + unitOfPart1)
-    val g = mutableListOf<String>()
-    for (elements in a) {
-        b.add(
-            when (elements) {
-                0 -> ""
-                1 -> "сто"
-                2 -> "двести"
-                3 -> "триста"
-                4 -> "четыреста"
-                else -> list2[elements] + "сот"
-            }
-        )
-    }
-    for (elements in f) {
-        d.add(
-            when (elements) {
-                in 11..19 -> list3[elements] + "надцать"
-                10 -> "десять"
-                else -> ""
-            }
-        )
-    }
-    for (elements in c) {
-        g.add(
-            when (elements) {
-                in 2..3 -> list2[elements] + "дцать"
-                4 -> "сорок "
-                in 5..8 -> list2[elements] + "десят"
-                9 -> "девяносто"
-                else -> ""
-            }
-        )
-    }
+    val b = a.map {
+        when (it) {
+            0 -> ""
+            1 -> "сто"
+            2 -> "двести"
+            3 -> "триста"
+            4 -> "четыреста"
+            else -> list2[it] + "сот"
+        }
+    }.toMutableList()
+    val d = f.map {
+        when (it) {
+            in 11..19 -> list3[it] + "надцать"
+            10 -> "десять"
+            else -> ""
+        }
+    }.toMutableList()
+    val g = c.map {
+        when (it) {
+            in 2..3 -> list2[it] + "дцать"
+            4 -> "сорок "
+            in 5..8 -> list2[it] + "десят"
+            9 -> "девяносто"
+            else -> ""
+        }
+    }.toMutableList()
     if (dozensOfPart0 != 0) g[0] += " "
     if (unitOfPart0 != 0) g[0] += list1[unitOfPart0]
     if (d[0].isEmpty()) d[0] += ""
