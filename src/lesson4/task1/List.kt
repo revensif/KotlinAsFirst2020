@@ -358,7 +358,7 @@ fun russian(n: Int): String = buildString {
     val g = c.map {
         when (it) {
             in 2..3 -> list2[it] + "дцать"
-            4 -> "сорок "
+            4 -> "сорок"
             in 5..8 -> list2[it] + "десят"
             9 -> "девяносто"
             else -> ""
