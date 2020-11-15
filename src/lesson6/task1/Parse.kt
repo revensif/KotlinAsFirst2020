@@ -76,7 +76,22 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val months = mapOf(
+        "января" to 1, "февраля" to 2, "марта" to 3, "апреля" to 4, "мая" to 5, "июня" to 6,
+        "июля" to 7, "августа" to 8, "сентября" to 9, "октября" to 10, "ноября" to 11, "декабря" to 12
+    )
+    var result = ""
+    val map = str.split(" ")
+    if (map.size == 3) {
+        val year = map[2].toInt()
+        val month = months[map[1]]
+        val day = map[0].toInt()
+        if (year > 0 && day > 0 && month != null && daysInMonth(month, year) >= day)
+            result = String.format("%02d.%02d.%d", day, month, year)
+    }
+    return result
+}
 /**
  * Средняя (4 балла)
  *
@@ -88,7 +103,6 @@ fun dateStrToDigit(str: String): String = TODO()
  * входными данными.
  */
 fun dateDigitToStr(digital: String): String = TODO()
-
 /**
  * Средняя (4 балла)
  *
@@ -115,6 +129,7 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
+
 fun bestLongJump(jumps: String): Int = TODO()
 
 /**
@@ -150,7 +165,18 @@ fun plusMinus(expression: String): Int = TODO()
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val list = str.split(" ")
+    var result = 0
+    val lowList = list.toMutableList()
+    lowList[0] = list[0].toLowerCase()
+    for (i in 1 until list.size) {
+        lowList[i] = list[i].toLowerCase()
+        if (lowList[i] == lowList[i - 1]) return result
+        result += list[i - 1].length + 1
+    }
+    return -1
+}
 
 /**
  * Сложная (6 баллов)
