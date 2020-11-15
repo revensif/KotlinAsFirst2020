@@ -84,10 +84,10 @@ fun dateStrToDigit(str: String): String {
     var result = ""
     val map = str.split(" ")
     if (map.size == 3) {
-        val year = map[2].toInt()
+        val year = map[2].toIntOrNull()
         val month = months[map[1]]
-        val day = map[0].toInt()
-        if (year > 0 && day > 0 && month != null && daysInMonth(month, year) >= day)
+        val day = map[0].toIntOrNull()
+        if (year != null && day != null && day > 0 && year > 0 && month != null && daysInMonth(month, year) >= day)
             result = String.format("%02d.%02d.%d", day, month, year)
     }
     return result
