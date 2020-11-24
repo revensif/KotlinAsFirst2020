@@ -88,7 +88,7 @@ fun dateStrToDigit(str: String): String {
         val month = months[map[1]]
         val day = map[0].toIntOrNull()
         if (year != null && day != null && day > 0 && year > 0 && month != null && daysInMonth(month, year) >= day)
-            result = String.format("%02d.%02d.%d", day, month, year)
+            return String.format("%02d.%02d.%d", day, month, year)
     }
     return result
 }
@@ -168,11 +168,8 @@ fun plusMinus(expression: String): Int = TODO()
 fun firstDuplicateIndex(str: String): Int {
     val list = str.split(" ")
     var result = 0
-    val lowList = list.toMutableList()
-    lowList[0] = list[0].toLowerCase()
     for (i in 1 until list.size) {
-        lowList[i] = list[i].toLowerCase()
-        if (lowList[i] == lowList[i - 1]) return result
+        if (list[i].toLowerCase() == list[i - 1].toLowerCase()) return result
         result += list[i - 1].length + 1
     }
     return -1
