@@ -99,8 +99,7 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val result = mutableMapOf<Int, List<String>>()
     for ((key, value) in grades) {
-        val s = result.getOrDefault(value, listOf<String>())
-        result[value] = s + listOf(key)
+        result[value] = result.getOrDefault(value, listOf<String>()) + listOf(key)
     }
     return result
 }
@@ -193,19 +192,15 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
     val result = mutableMapOf<String, Double>()
     val count = mutableMapOf<String, Int>()
     for ((key, value) in stockPrices) {
-        if (count[key] == null) {
-            count[key] = 1
-            result[key] = value
-        } else {
-            count[key] = count[key]!! + 1
-            result[key] = result[key]!! + value
-        }
+        count[key] = (count[key] ?: 0) + 1
+        result[key] = (result[key] ?: 0.0) + value
     }
-    for ((key, value) in count) {
-        result[key] = result[key]!! / value
+    result.replaceAll { key, value ->
+        value / count[key]!!
     }
     return result
 }
+
 
 
 /**
@@ -252,10 +247,12 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val wordSet = mutableSetOf<Char>()
-    for (i in word.indices) wordSet.add(word[i])
-    val charsSet = chars.toSet()
-    return charsSet.containsAll(wordSet)
+    val charSet = mutableSetOf<Char>()
+    for (i in chars) charSet.add(i)
+    for (letter in word) {
+        if (letter !in charSet) return false
+    }
+    return true
 }
 
 /**
@@ -273,8 +270,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val result = mutableMapOf<String, Int>()
     for (key in list) {
-        if (!result.containsKey(key)) result[key] = 1
-        else result[key] = result[key]!! + 1
+        result[key] = (result[key] ?: 0) + 1
     }
     return result.filter { it.value > 1 }
 }
