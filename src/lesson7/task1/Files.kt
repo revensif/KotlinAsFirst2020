@@ -2,6 +2,7 @@
 
 package lesson7.task1
 
+import org.hamcrest.core.StringStartsWith
 import java.io.File
 
 // Урок 7: работа с файлами
@@ -63,7 +64,15 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Подчёркивание в середине и/или в конце строк значения не имеет.
  */
 fun deleteMarked(inputName: String, outputName: String) {
-    TODO()
+    val input = File(inputName)
+    File(outputName).bufferedWriter().use {
+        input.forEachLine { str ->
+            if (str.isEmpty() || str[0] != '_') {
+                it.write(str)
+                it.newLine()
+            }
+        }
+    }
 }
 
 /**
