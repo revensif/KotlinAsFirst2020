@@ -202,7 +202,6 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
 }
 
 
-
 /**
  * Средняя (4 балла)
  *
@@ -226,11 +225,9 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
             if (result == null) {
                 result = key
                 min = value.second
-            } else {
-                if (value.second < min!!) {
-                    result = key
-                    min = value.second
-                }
+            } else if (value.second < min!!) {
+                result = key
+                min = value.second
             }
         }
     }
