@@ -97,9 +97,9 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    val result = mutableMapOf<Int, List<String>>()
+    val result = mutableMapOf<Int, MutableList<String>>()
     for ((key, value) in grades) {
-        result[value] = result.getOrDefault(value, listOf<String>()) + listOf(key)
+        result.getOrPut(value) { mutableListOf() }.add(key)
     }
     return result
 }
@@ -245,9 +245,9 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val charSet = mutableSetOf<Char>()
-    for (i in chars) charSet.add(i)
+    for (i in chars) charSet.add(i.toLowerCase())
     for (letter in word) {
-        if (letter !in charSet) return false
+        if (letter.toLowerCase() !in charSet) return false
     }
     return true
 }

@@ -81,7 +81,6 @@ fun dateStrToDigit(str: String): String {
         "января" to 1, "февраля" to 2, "марта" to 3, "апреля" to 4, "мая" to 5, "июня" to 6,
         "июля" to 7, "августа" to 8, "сентября" to 9, "октября" to 10, "ноября" to 11, "декабря" to 12
     )
-    var result = ""
     val map = str.split(" ")
     if (map.size == 3) {
         val year = map[2].toIntOrNull()
@@ -90,8 +89,9 @@ fun dateStrToDigit(str: String): String {
         if (year != null && day != null && day > 0 && year > 0 && month != null && daysInMonth(month, year) >= day)
             return String.format("%02d.%02d.%d", day, month, year)
     }
-    return result
+    return ""
 }
+
 /**
  * Средняя (4 балла)
  *
@@ -103,6 +103,7 @@ fun dateStrToDigit(str: String): String {
  * входными данными.
  */
 fun dateDigitToStr(digital: String): String = TODO()
+
 /**
  * Средняя (4 балла)
  *
@@ -130,7 +131,10 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    val result = jumps.split(Regex("""(\s)""")).filter { it != "%" && it != "-" }.map { it.toIntOrNull() ?: return -1 }
+    return result.maxOrNull() ?: -1
+}
 
 /**
  * Сложная (6 баллов)
@@ -166,10 +170,10 @@ fun plusMinus(expression: String): Int = TODO()
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
-    val list = str.split(" ")
+    val list = str.toLowerCase().split(" ")
     var result = 0
     for (i in 1 until list.size) {
-        if (list[i].toLowerCase() == list[i - 1].toLowerCase()) return result
+        if (list[i] == list[i - 1]) return result
         result += list[i - 1].length + 1
     }
     return -1
