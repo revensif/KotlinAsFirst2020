@@ -257,7 +257,21 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    TODO()
+    val input = File(inputName).bufferedReader()
+    var str = 0
+    val strList = mutableListOf<String>()
+    File(outputName).bufferedWriter().use {
+        input.forEachLine { word ->
+            if (word.length > str && word.length == word.toLowerCase().toSet().size) {
+                str = word.length
+                strList.clear()
+                strList.add(word)
+            } else if (word.length == str && word.length == word.toLowerCase().toSet().size) {
+                strList.add(word)
+            }
+        }
+        it.write(strList.joinToString(separator = ", "))
+    }
 }
 
 /**
@@ -407,7 +421,39 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlLists(inputName: String, outputName: String) {
-    TODO()
+    val input = File(inputName)
+    File(outputName).printWriter().use {
+        it.println("<html>\n" + "<body>\n" + "<p>")
+        val closing = mutableListOf<String>()
+        var prevTab = -1
+        input.forEachLine { str ->
+            var i = 0
+            while (str[i] == ' ') i++
+            val tab = i / 4
+            if (prevTab < tab) {
+                if (str[i] == '*') {
+                    it.println("<ul>\n<li>")
+                    closing.add("</ul>")
+                } else {
+                    it.println("<ol>\n<li>")
+                    closing.add("</ol>")
+                }
+            } else if (prevTab == tab) {
+                it.println("</li>\n<li>")
+            } else if (prevTab > tab) {
+                it.println("</li>")
+                val dif = prevTab - tab
+                for (j in 1..dif)
+                    it.println(closing.removeLast() + "\n</li>")
+                it.println("<li>")
+            }
+            it.println(str.replace(Regex("""^((\s*\d*\.)|^(\s*\*))\s*""")) { "" })
+            prevTab = tab
+        }
+        while (closing.isNotEmpty())
+            it.println("</li>\n" + closing.removeLast())
+        it.print("</p>\n" + "</body>\n" + "</html>")
+    }
 }
 
 /**
