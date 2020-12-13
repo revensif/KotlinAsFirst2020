@@ -425,12 +425,12 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
     File(outputName).printWriter().use {
         it.println("<html>\n" + "<body>\n" + "<p>")
         val closing = mutableListOf<String>()
-        var prevTab = -1
+        var prevSpacing = -1
         input.forEachLine { str ->
             var i = 0
             while (str[i] == ' ') i++
-            val tab = i / 4
-            if (prevTab < tab) {
+            val spacing = i / 4
+            if (prevSpacing < spacing) {
                 if (str[i] == '*') {
                     it.println("<ul>\n<li>")
                     closing.add("</ul>")
@@ -438,17 +438,17 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
                     it.println("<ol>\n<li>")
                     closing.add("</ol>")
                 }
-            } else if (prevTab == tab) {
+            } else if (prevSpacing == spacing) {
                 it.println("</li>\n<li>")
-            } else if (prevTab > tab) {
+            } else if (prevSpacing > spacing) {
                 it.println("</li>")
-                val dif = prevTab - tab
+                val dif = prevSpacing - spacing
                 for (j in 1..dif)
                     it.println(closing.removeLast() + "\n</li>")
                 it.println("<li>")
             }
             it.println(str.replace(Regex("""^((\s*\d*\.)|^(\s*\*))\s*""")) { "" })
-            prevTab = tab
+            prevSpacing = spacing
         }
         while (closing.isNotEmpty())
             it.println("</li>\n" + closing.removeLast())
