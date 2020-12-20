@@ -137,7 +137,7 @@ enum class Direction {
         DOWN_LEFT -> UP_RIGHT
         UP_LEFT -> DOWN_RIGHT
         UP_RIGHT -> DOWN_LEFT
-        else -> INCORRECT
+        INCORRECT -> INCORRECT
     }
 
     /**

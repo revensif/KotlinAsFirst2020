@@ -2,6 +2,7 @@
 
 package lesson7.task1
 
+import lesson3.task1.digitNumber
 import org.hamcrest.core.StringStartsWith
 import java.io.File
 
@@ -260,16 +261,17 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val input = File(inputName).bufferedReader()
     var str = 0
     val strList = mutableListOf<String>()
-    File(outputName).bufferedWriter().use {
-        input.forEachLine { word ->
-            if (word.length > str && word.length == word.toLowerCase().toSet().size) {
-                str = word.length
-                strList.clear()
-                strList.add(word)
-            } else if (word.length == str && word.length == word.toLowerCase().toSet().size) {
-                strList.add(word)
-            }
+    input.forEachLine { word ->
+        val check = word.length == word.toLowerCase().toSet().size
+        if (word.length > str && check) {
+            str = word.length
+            strList.clear()
+            strList.add(word)
+        } else if (word.length == str && check) {
+            strList.add(word)
         }
+    }
+    File(outputName).bufferedWriter().use {
         it.write(strList.joinToString(separator = ", "))
     }
 }
@@ -421,39 +423,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlLists(inputName: String, outputName: String) {
-    val input = File(inputName)
-    File(outputName).printWriter().use {
-        it.println("<html>\n" + "<body>\n" + "<p>")
-        val closing = mutableListOf<String>()
-        var prevSpacing = -1
-        input.forEachLine { str ->
-            var i = 0
-            while (str[i] == ' ') i++
-            val spacing = i / 4
-            if (prevSpacing < spacing) {
-                if (str[i] == '*') {
-                    it.println("<ul>\n<li>")
-                    closing.add("</ul>")
-                } else {
-                    it.println("<ol>\n<li>")
-                    closing.add("</ol>")
-                }
-            } else if (prevSpacing == spacing) {
-                it.println("</li>\n<li>")
-            } else if (prevSpacing > spacing) {
-                it.println("</li>")
-                val dif = prevSpacing - spacing
-                for (j in 1..dif)
-                    it.println(closing.removeLast() + "\n</li>")
-                it.println("<li>")
-            }
-            it.println(str.replace(Regex("""^((\s*\d*\.)|^(\s*\*))\s*""")) { "" })
-            prevSpacing = spacing
-        }
-        while (closing.isNotEmpty())
-            it.println("</li>\n" + closing.removeLast())
-        it.print("</p>\n" + "</body>\n" + "</html>")
-    }
+    TODO()
 }
 
 /**
@@ -493,10 +463,10 @@ fun markdownToHtml(inputName: String, outputName: String) {
 2350
  *
  */
+
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
     TODO()
 }
-
 
 /**
  * Сложная (25 баллов)
